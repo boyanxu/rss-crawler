@@ -1,0 +1,46 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+build/
+dist/
+eggs/
+*.egg-info/
+*.egg
+
+# IDEs and editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+*.bak
+*.tmp
+*.sublime-workspace
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+*.cache
+
+# Other
+*.pyc
+*.bak
+*.csv
+*.json
+*.yaml
+*.yml
+*.env
+*.env.*
+*.json.gz
