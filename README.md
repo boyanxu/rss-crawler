@@ -1,92 +1,69 @@
-# feed-crawler
+# RSS Crawler README
 
+## Overview
 
+This Scrapy spider is designed to crawl RSS feeds and extract articles from the corresponding feeds. It leverages both the `feedparser` library for parsing RSS feed entries and the `trafilatura` library to extract detailed information from the linked articles.
 
-## Getting started
+## Features
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+- **RSS Feed Parsing**: Parses RSS feeds to extract article links.
+- **Article Content Extraction**: Extracts the full text of articles using `trafilatura`, including relevant metadata.
+- **Link Extraction**: Extracts all links present within the article's content.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## How to Use
 
-## Add your files
+1. **Prerequisites**:
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+   - Ensure you have `scrapy`, `feedparser`, and `trafilatura` libraries installed.
 
-```
-cd existing_repo
-git remote add origin http://gitlab.requo.in/core-platform/feed-crawler.git
-git branch -M main
-git push -uf origin main
-```
+2. **URLs Source File**:
 
-## Integrate with your tools
+   - Create a `smallweb.txt` file at the root of the `crawler_core` directory.
+   - Populate this file with one URL (RSS feed URL) per line.
 
-- [ ] [Set up project integrations](http://gitlab.requo.in/core-platform/feed-crawler/-/settings/integrations)
+3. **Run the Spider**:
 
-## Collaborate with your team
+   - Navigate to the root of the `crawler_core` directory in your terminal.
+   - Run the following command:
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+     ```bash
+     scrapy crawl rss
+     ```
 
-## Test and Deploy
+4. **Output**:
 
-Use the built-in continuous integration in GitLab.
+   - As the spider runs, it will yield a dictionary for each article with the following fields:
+     - `rss_feed_url`: The RSS feed's URL.
+     - `article_link`: The direct link to the article.
+     - `fulltext`: The extracted full text of the article.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+## Code Structure
 
-***
+- `start_requests` Method: Reads the `smallweb.txt` file to get a list of RSS feed URLs and starts the crawling process.
 
-# Editing this README
+- `parse` Method: Processes the fetched RSS feed, parses it, and follows the links to the articles.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+- `parse_article` Method: Extracts the full text of the fetched articles and any embedded links.
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+- `parse_link_page` Method: A placeholder method that can be further developed to process pages linked within articles.
 
-## Name
-Choose a self-explaining name for your project.
+## Dependencies
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+- **feedparser**: Parses the RSS feed to extract article URLs.
+- **trafilatura**: Extracts detailed content from the articles.
+- **Scrapy**: Provides the framework for the web crawling.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## Extending the Spider
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+The spider is designed with modularity in mind. You can easily:
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+- **Extend Link Processing**: Uncomment the relevant sections in `parse_article` and `parse_link_page` methods to further process or extract details from links found within articles.
+- **Add More Callbacks**: Define additional parsing methods and link them using Scrapy's callback mechanism.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+## Notes
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Make sure to respect `robots.txt` files of websites you crawl and ensure you're adhering to the terms of service of the websites you're accessing.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+---
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+I hope this README provides a clear overview and instructions for your RSS Crawler! If you have additional functionalities or requirements in the future, be sure to update the README accordingly.
