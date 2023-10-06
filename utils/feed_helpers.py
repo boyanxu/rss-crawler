@@ -1,5 +1,31 @@
 from scrapy.http import TextResponse
 from lxml import etree
+import re
+
+def extract_markdown_links(text):
+    # This regular expression captures patterns in the form of [TITLE](URL)
+    # The first group captures the title, and the second group captures the URL.
+    pattern = r'\[([^\]]+)\]\(([^)]+)\)'
+
+    # Using findall to get all matches as a list of tuples
+    matches = re.findall(pattern, text)
+
+    # Convert matches to a list of dictionaries for clearer representation
+    return [{'url': url, 'title': title} for title, url in matches]
+
+def extract_plain_links(text):
+    # This regex captures URLs that are not part of the markdown link format.
+    # The negative lookbehind (?<!\]\() ensures the URL isn't preceded by "](".
+    # The negative lookahead (?!\)) ensures the URL isn't followed by ")".
+    pattern = r'(?<!\]\()https?://\S+|www\.\S+(?!\))'
+
+    # Using findall to get all matches as a list
+    urls = re.findall(pattern, text)
+
+    return [ {'url': url, 'title': ""} for url in urls]
+
+def extract_all_links(text):
+    return extract_markdown_links(text) + extract_plain_links(text)
 
 def is_feed(response: TextResponse) -> bool:
     """

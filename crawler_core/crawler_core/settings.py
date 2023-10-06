@@ -91,3 +91,15 @@ ROBOTSTXT_OBEY = True
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+FEEDS = {
+    'rss.json': {
+        'format': 'json',
+        'encoding': 'utf8',
+        'store_empty': False,
+        'fields': None,
+        'indent': 4,
+        'item_export_kwargs': {
+            'export_empty_fields': True,
+        },
+    },
+}
